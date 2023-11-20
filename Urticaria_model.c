@@ -266,7 +266,7 @@ void output(double **u1, double **u2, double **u3, double **u4, double **u1_sum,
 void RungeKutta(double **u1, double **u2, double **u3, double **u4, double **u1_sum, double **u3_sum){
     int i, j;
     double KaiM, KaiB;
-    double kk1, kk2, kk3, kk4, ww1, ww2, ww3, ww4;
+    double kk1, kk2, kk3, kk4, ww1, ww2, ww3, ww4,pp1,pp2,pp3,pp4,qq1,qq2,qq3,qq4;
 
     for (i=1 ; i<=N-1 ; i++ ) {
                 for (j=1 ; j<=N-1 ; j++) {
@@ -287,9 +287,9 @@ void RungeKutta(double **u1, double **u2, double **u3, double **u4, double **u1_
                     
                     
                     kk1=Rac2(u1[i][j], u2[i][j], u3[i][j], u4[i][j], KaiM, KaiB);
-                    kk2=Rac2(u1[i][j], u2[i][j]+kk1*dt*0.5, u3[i][j]+ww1*dt*0.5, u4[i][j], KaiM, KaiB);
-                    kk3=Rac2(u1[i][j], u2[i][j]+kk2*dt*0.5, u3[i][j]+ww2*dt*0.5, u4[i][j], KaiM, KaiB);
-                    kk4=Rac2(u1[i][j], u2[i][j]+kk3*dt, u3[i][j]+ww3*dt, u4[i][j], KaiM, KaiB);
+                    kk2=Rac2(u1[i][j]+pp1*dt*0.5, u2[i][j]+kk1*dt*0.5, u3[i][j]+ww1*dt*0.5, u4[i][j]+qq1*dt*0.5, KaiM, KaiB);
+                    kk3=Rac2(u1[i][j]+pp2*dt*0.5, u2[i][j]+kk2*dt*0.5, u3[i][j]+ww2*dt*0.5, u4[i][j]+qq2*dt*0.5, KaiM, KaiB);
+                    kk4=Rac2(u1[i][j]+pp3*dt, u2[i][j]+kk3*dt, u3[i][j]+ww3*dt, u4[i][j]+qq3*dt, KaiM, KaiB);
                     
                     
                     if(u3[i][j]<u300){
@@ -297,9 +297,9 @@ void RungeKutta(double **u1, double **u2, double **u3, double **u4, double **u1_
                     }
                     else{
                     ww1=Rac3(u1[i][j], u2[i][j], u3[i][j], u4[i][j], KaiM, KaiB);
-                    ww2=Rac3(u1[i][j], u2[i][j]+kk1*dt*0.5, u3[i][j]+ww1*dt*0.5, u4[i][j], KaiM, KaiB);
-                    ww3=Rac3(u1[i][j], u2[i][j]+kk2*dt*0.5, u3[i][j]+ww2*dt*0.5, u4[i][j], KaiM, KaiB);
-                    ww4=Rac3(u1[i][j], u2[i][j]+kk3*dt, u3[i][j]+ww3*dt, u4[i][j], KaiM, KaiB);
+                    ww2=Rac3(u1[i][j]+pp1*dt*0.5, u2[i][j]+kk1*dt*0.5, u3[i][j]+ww1*dt*0.5, u4[i][j]+qq1*dt*0.5, KaiM, KaiB);
+                    ww3=Rac3(u1[i][j]+pp2*dt*0.5, u2[i][j]+kk2*dt*0.5, u3[i][j]+ww2*dt*0.5, u4[i][j]+qq2*dt*0.5, KaiM, KaiB);
+                    ww4=Rac3(u1[i][j]+pp3*dt, u2[i][j]+kk3*dt, u3[i][j]+ww3*dt, u4[i][j]+qq3*dt, KaiM, KaiB);
                     
                     u3[i][j]=u3[i][j]+dt*(ww1+2.0*ww2+2.0*ww3+ww4)/6.0;
                     }
@@ -353,7 +353,7 @@ void RightSide1(double **u1, double **F1,  double alp1y, double **u4, double **F
                 }
                 else {
                     w1[j]=alp1y*u1[i][j-1]+(1.0-2*alp1y)*u1[i][j]+alp1y * u1[i][j+1]+F1[i][j];
-                    w4[j]=alp4y*u4[i][j-1]+(1.0-2*alp4y)*u4[i][j]+alp1y * u4[i][j+1]+F4[i][j];
+                    w4[j]=alp4y*u4[i][j-1]+(1.0-2*alp4y)*u4[i][j]+alp4y * u4[i][j+1]+F4[i][j];
                 }
                             }
         for(j=1; j<N;j++){
