@@ -34,35 +34,34 @@ void*AllocMatrix(int s,int u,int v)
 //------------------------------------------------------------------
 
 
-#define N 256
-#define M 4000
-#define m 100
-#define Nn 256
-#define Mn 20
+#define N 256  //Spatial grid number
+#define M 4000 //Time
+#define m 100 //temporal grid number
+#define Nn 256 //plot grid number
+#define Mn 20 //plot time number
 
-#define dd 0.2
-#define nx 5
-#define ny 3
 
+//Diffusion coefficients
 #define D1x 0.0000047
 #define D1y 0.0000047
 #define D4x 0.0000047
 #define D4y 0.0000047
 
 
-
+//Total histamin of Mast cell(U0) and Basophil(U0B)
 #define U0 (600.0)
 #define U0B (600.0)
 
 
-/* Paramaeters */
+/* Kinetic Paramaeters */
+//Baosphil-related equation
 #define delB (0.1)
 #define gaB (5.2)
 #define alpB (0.335)
 #define alpB0 (0.00625)
 #define muB (1.0)
 
-
+//Tissue factor-related equation
 #define delT (0.01)
 #define gaT (7.0)
 #define gaT0 (2.2)
@@ -70,20 +69,20 @@ void*AllocMatrix(int s,int u,int v)
 #define alpT0 (8.925)
 #define muT (1.0)
 
-
+//Mast cell-related equation
 #define delM (0.01)
 #define gaM (5.0)
 #define alpM (0.865)
 #define alpM0 (0.0035)
 #define muM (1.0)
 
-
+//Coagulation factor-related equation
 #define gaC (20.0)
 #define muC (1.0)
 #define beta (20.0)
 
 
-
+//Parameter for initial conditions
 #define p_rangeB (0.01)
 #define pp (0.9995)
 #define p_rangeH (0.01)
@@ -93,6 +92,7 @@ void*AllocMatrix(int s,int u,int v)
 #define u30 (delB/muB)
 #define u300 (u30*(1+p_rangeB*pp))
 #define u40 (0.0)
+//Wheal state function(Skin=S_w) parameter
 #define sp (10.0)
 #define sp2 (1.0)
 
@@ -338,6 +338,10 @@ void ReactionTerm(double **u1, double **u2, double **u3, double **u4, double **u
         }
 }
 
+
+
+//Functions for ADI method
+
 void RightSide1(double **u1, double **F1,  double alp1y, double **u4, double **F4,  double alp4y){
 	int i, j ;
 	double w1[N], w4[N];
@@ -353,7 +357,7 @@ void RightSide1(double **u1, double **F1,  double alp1y, double **u4, double **F
                 }
                 else {
                     w1[j]=alp1y*u1[i][j-1]+(1.0-2*alp1y)*u1[i][j]+alp1y * u1[i][j+1]+F1[i][j];
-                    w4[j]=alp4y*u4[i][j-1]+(1.0-2*alp4y)*u4[i][j]+alp4y * u4[i][j+1]+F4[i][j];
+                    w4[j]=alp4y*u4[i][j-1]+(1.0-2*alp4y)*u4[i][j]+alp1y * u4[i][j+1]+F4[i][j];
                 }
                             }
         for(j=1; j<N;j++){
@@ -362,6 +366,7 @@ void RightSide1(double **u1, double **F1,  double alp1y, double **u4, double **F
     }
 }
 
+//Functions for ADI method
 void RightSide2(double **u1, double **F1,  double alp1x, double **u4, double **F4,  double alp4x){
 	int i, j;
 	double w1[N], w4[N];
@@ -387,6 +392,7 @@ void RightSide2(double **u1, double **F1,  double alp1x, double **u4, double **F
         }
 }
 
+//Functions for ADI method
 void LU1(double **u1, double alp1x, double **u4, double alp4x){
 	int i, j;
 	double bet1,  gam1[N], bet4,  gam4[N];
@@ -418,6 +424,7 @@ void LU1(double **u1, double alp1x, double **u4, double alp4x){
     }
 }
 
+//Functions for ADI method
 void LU2(double **u1,double alp1y, double **u4, double alp4y){
 	int i, j;	
 	double bet1, gam1[N], bet4, gam4[N];
@@ -443,6 +450,7 @@ for (i=1; i<=N-1; i++){
 					}
 	}
 }
+
 
 
 
